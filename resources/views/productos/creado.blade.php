@@ -8,7 +8,7 @@
 		    Producto Creado Con Exito
 		  </div>
 		  <div class="card-body">
-		    <p class="card-text container-texto">El Producto se Visualizara en la categoria seleccionada en la creacion del mismo.</p>
+		    <p class="card-text container-texto">El Producto se visualizara en la marca seleccionada en la creacion del mismo.</p>
 		    <a href="/administracion/productos" class="btn btn-success btn-lg">Regresar</a>
 		  </div>
 		</div>

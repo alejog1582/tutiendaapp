@@ -3,29 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePedidoRequest;
-use App\Http\Requests\CreateProductoRequest;
+use App\Http\Requests\CreateMarca;
 use App\Models\Pedido;
 use App\Models\Producto;
+use App\Models\Marca;
 use Cloudinary;
 use Illuminate\Http\Request;
 
 class AdministracionController extends Controller {
 
 	public function productos() {
-		return view('productos.adminproductos');
+		$marcas = Marca::where('estado', 'activo')->get();
+		$reg_marcas = true;
+		if (count($marcas) == 0) {
+			$reg_marcas = false;		
+		}
+		return view('productos.adminproductos', [
+			'marcas' => $marcas,
+			'reg_marcas' => $reg_marcas,
+		]);
+	}
+
+	public function marcas() {
+		$marcas = Marca::all();
+		return view('marcas.adminmarcas', [
+			'marcas' => $marcas,
+		]);
+	}
+
+	public function marcasnew() {
+		return view('marcas.newmarca');
 	}
 
     public function create(Request $request) {        
-        $imagen_url = Cloudinary::uploadFile( $request ->file( 'imagen' )->getRealPath (), ['folder' => 'detalles_evertec'])->getSecurePath ();
+        $imagen_url = Cloudinary::uploadFile( $request ->file( 'imagen' )->getRealPath (), ['folder' => 'tu_tienda_app'])->getSecurePath ();
         $producto = Producto::create([
 			'estado' => $request->input('estado_producto'),
 			'imagen' => $imagen_url,
 			'nombre_producto' => $request->input('nombre_producto'),
 			'descripcion_producto' => $request->input('descripcion_producto'),
-			'categoria_producto' => $request->input('categoria_producto'),
+			'talla_producto' => $request->input('talla_producto'),
+			'cantidad_producto' => $request->input('cantidad_producto'),
+			'id_marca_producto' => $request->input('marca_producto'),
 			'valor_producto' => $request->input('valor_producto'),
 		]);
 		return redirect('/administracion/productos/creado');
+	}
+
+	public function createmarca(CreateMarca $request) {        
+        $marca = Marca::create([
+			'nombre_marca' => $request->input('nombre_marca'),
+			'referencia_marca' => $request->input('referencia_marca'),
+			'estado' => 'activo',			
+		]);
+		return redirect('/administracion/marcas');
 	}
 
 	public function productoscreado() {
@@ -48,8 +79,18 @@ class AdministracionController extends Controller {
 
     public function editarproducto($id) {
 		$producto = Producto::find($id);
+		$marcas = Marca::where('estado', 'activo')->get();
 		return view('productos.editarproducto', [
 			'producto' => $producto,
+			'marcas' => $marcas,
+		]);
+
+	}
+
+	public function editarmarca($id) {
+		$marca = Marca::find($id);
+		return view('marcas.editarmarca', [
+			'marca' => $marca,
 		]);
 
 	}
@@ -64,7 +105,9 @@ class AdministracionController extends Controller {
 		}
 		$producto->nombre_producto = $request->nombre_producto;
 		$producto->descripcion_producto = $request->descripcion_producto;
-		$producto->categoria_producto = $request->categoria_producto;
+		$producto->talla_producto = $request->talla_producto;
+		$producto->cantidad_producto = $request->cantidad_producto;
+		$producto->id_marca_producto = $request->marca_producto;
 		$producto->estado = $request->estado_producto;
 		$producto->valor_producto = $request->valor_producto;
 
@@ -76,6 +119,25 @@ class AdministracionController extends Controller {
 		if ($estado == 'desactivo') {
 			return redirect('/administracion/productosdesactivados');
 		}
+
+	}
+
+	public function savemarca(Request $request) {
+		$marca = Marca::find($request->id_marca);
+		if ($request->estado_marca == 'activo') {
+			$estado = 'activo';
+		}
+		if ($request->estado_marca == 'desactivo') {
+			$estado = 'desactivo';
+		}
+		$marca->nombre_marca = $request->nombre_marca;
+		$marca->referencia_marca = $request->referencia_marca;
+		$marca->estado = $estado;
+
+		$marca->save();
+
+		return redirect('/administracion/marcas');
+		
 
 	}
 
@@ -105,121 +167,11 @@ class AdministracionController extends Controller {
 			'estado' => $estado,
 		]);
 	}
-
-	
 		
 	public function Editproddesactivo($id) {
 		$producto = Producto::find($id);
 		return view('productos.editproddesactivo', [
 			'producto' => $producto,
 		]);
-	}
-	
-	public function Procesarmensaje(Request $request) {
-		$mensaje = Mensaje::find($request->id_mensaje);
-		$mensaje->estado_mensaje = 'Procesado';
-		$mensaje->save();
-		return redirect('/administracion/mensajes');
-	}
-	public function Editarpedido($id) {
-		$pedido = Pedido::find($id);
-		return view('pedidos.editarpedido', [
-			'pedido' => $pedido,
-		]);
-	}
-	public function Savepedido(CreatePedidoRequest $request) {
-		$pedido = Pedido::find($request->id_pedido);
-		if ($pedido->estado == 'pendiente de pago') {
-			$estado = 'pendiente de pago';
-		}
-		if ($pedido->estado == 'en proceso') {
-			$estado = 'en proceso';
-		}
-		if ($pedido->estado == 'procesado') {
-			$estado = 'procesado';
-		}
-		$pedido->estado = $request->estado_pedido;
-		$pedido->direccion_envio = $request->direccion_envio;
-		$pedido->apto_casa_oficina = $request->info_direccion;
-		$pedido->barrio = $request->barrio;
-		$pedido->fecha_entrega = $request->fecha_entrega;
-		$pedido->hora_entrega = $request->hora_entrega;
-		$pedido->nombre_contacto = $request->nombre_contacto;
-		$pedido->celular_contacto = $request->celular_contacto;
-		$pedido->email_contacto = $request->email_contacto;
-		$pedido->medio_pago = $request->forma_pago;
-		$pedido->codigo_promocional = $request->codigo_promocional;
-
-		$pedido->save();
-
-		if ($estado == 'en proceso') {
-			return redirect('/administracion/pedidos');
-		}
-		if ($estado == 'pendiente de pago') {
-			return redirect('/administracion/pedidos/pendientepago');
-		}
-		if ($estado == 'procesado') {
-			return redirect('/administracion/pedidos/procesado');
-		}
-	}
-	public function mensajes() {
-		$mensajes = Mensaje::where('estado_mensaje', 'en proceso')->get();
-		return view('mensajes.adminmensajes', [
-			'mensajes' => $mensajes,
-		]);
-	}
-	public function MensajesProcesados() {
-		$mensajes = Mensaje::where('estado_mensaje', 'Procesado')->get();
-		return view('mensajes.mensajesprocesados', [
-			'mensajes' => $mensajes,
-		]);
-	}
-	public function descuentos() {
-		$descuentos = Descuento::all();
-		return view('pedidos.descuentos', [
-			'descuentos' => $descuentos,
-		]);
-	}
-	public function Editardescuento($id) {
-		$descuento = Descuento::find($id);
-		return view('pedidos.editardescuento', [
-			'descuento' => $descuento,
-		]);
-	}
-	public function savedescuento(Request $request) {
-		$descuento = Descuento::find($request->id_descuento);
-		$descuento->codigo = $request->codigo_descuento;
-		$descuento->descuento = $request->porcentaje_descuento;
-		$descuento->estado = $request->estado_descuento;
-		$descuento->email = $request->email_descuento;
-		$descuento->save();
-
-		return redirect('/administracion/descuentos');
-	}
-	public function newdescuento() {
-		return view('pedidos.newdescuento');
-	}
-	public function savenewdescuento(Request $request) {
-		$descuento = Descuento::create([
-			'codigo' => $request->input('codigo_descuento'),
-			'descuento' => $request->input('porcentaje_descuento'),
-			'estado' => 'activo',
-			'email' => $request->input('email_descuento'),
-		]);
-		return redirect('/administracion/descuentos');
-	}
-	public function Tarjetas() {
-		$tarjetas = Tarjeta::all();
-		return view('pedidos.tarjetas', [
-			'tarjetas' => $tarjetas,
-		]);
-	}
-	public function TarjetasEditar(Request $request) {
-		$tarjeta = Tarjeta::find($request->id_tarjeta);
-		$tarjeta->estado = 'procesado';
-		$tarjeta->save();
-
-		return redirect('/administracion/pedidos/tarjetas');
-	}
-
+	}	
 }

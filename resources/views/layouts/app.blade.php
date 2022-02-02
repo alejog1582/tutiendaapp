@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Prueba Evertec')</title>
+    <title>@yield('title', 'Tu Tienda App')</title>
 
     <!-- Scripts -->
     <!--<script src="{{ asset('js/app.js') }}" defer></script>-->
@@ -62,25 +62,7 @@
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Productos
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Regalo de cumpleaños</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Regalo de aniversario</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Regalos light</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Regalos Picnic</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Regalos Endulza el Dia</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Regalos Ancheta</a>
-                            </div>
-                        </li>                        
+                        </li>                                                
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -122,7 +104,7 @@
                 <div class="row text-center">
                     <div class="col-12 col-md-4">
                         <img width="50%" src="{{ asset('images/logo.png') }}">
-                        <p>En Gaby Regala Somos un equipo dedicado a trabajar con amor, para entregar momentos agradables y felices con detalles diseñados para cada ocasión.</p>
+                        <p>En Tu Tienda App Somos un equipo dedicado a trabajar con amor, para entregar la mejor herramienta tecnologica.</p>
                     </div>
                     <div class="col-12 col-md-4">
                     </div>

@@ -17,12 +17,7 @@ use App\Http\Controllers\PedidoController;
 */
 
 Route::get('/', [App\Http\Controllers\PagesController::class, 'home']);
-Route::get('/catalago/anchetas', [App\Http\Controllers\PagesController::class, 'show_anchetas']);
-Route::get('/catalago/cumpleanos' , [App\Http\Controllers\PagesController::class, 'show_cumpleanos']);
-Route::get('/catalago/aniversario' , [App\Http\Controllers\PagesController::class, 'show_aniversario']);
-Route::get('/catalago/picnic',  [App\Http\Controllers\PagesController::class, 'show_picnic']);
-Route::get('/catalago/endulzadas',  [App\Http\Controllers\PagesController::class, 'show_endulzadas']);
-Route::get('/catalago/light',  [App\Http\Controllers\PagesController::class, 'show_light']);
+Route::get('/catalago/{id}', [App\Http\Controllers\PagesController::class, 'productos_marca']);
 Route::get('/prepedido/{id}/',  [App\Http\Controllers\PedidoController::class, 'prepedido']);
 Route::post('/pedido',  [App\Http\Controllers\PedidoController::class, 'create']);
 Route::get('/resultpedido/{id}',  [App\Http\Controllers\PedidoController::class, 'resultpedido']);
@@ -34,11 +29,16 @@ Route::get('/pagopedido/{id}',  [App\Http\Controllers\PedidoController::class, '
 
 Route::group(['middleware' => 'admin'], function () {
 	Route::get('/administracion/productos', [App\Http\Controllers\AdministracionController::class, 'productos']);
+	Route::get('/administracion/marcas', [App\Http\Controllers\AdministracionController::class, 'marcas']);
+	Route::get('/administracion/marcas/new', [App\Http\Controllers\AdministracionController::class, 'marcasnew']);
+	Route::post('/administracion/marcas/newsave', [App\Http\Controllers\AdministracionController::class, 'createmarca']);
 	Route::post('/administracion/productos/create', [App\Http\Controllers\AdministracionController::class, 'create']);
 	Route::get('/administracion/productos/creado', [App\Http\Controllers\AdministracionController::class, 'productoscreado']);
 	Route::get('/administracion/productosexistentes', [App\Http\Controllers\AdministracionController::class, 'productosexistentes']);
 	Route::get('/administracion/editarproducto/{id}', [App\Http\Controllers\AdministracionController::class, 'editarproducto']);
+	Route::get('/administracion/editarmarca/{id}', [App\Http\Controllers\AdministracionController::class, 'editarmarca']);
 	Route::post('/administracion/saveproducto', [App\Http\Controllers\AdministracionController::class, 'saveproducto']);
+	Route::post('/administracion/savemarca', [App\Http\Controllers\AdministracionController::class, 'savemarca']);
 	Route::get('/administracion/productosdesactivados',  [App\Http\Controllers\AdministracionController::class, 'productosdesactivados']);
 	Route::get('/administracion/pedidos', [App\Http\Controllers\AdministracionController::class, 'pedidos']);
 	Route::get('/administracion/pedidos/procesado', [App\Http\Controllers\AdministracionController::class, 'procesado']);

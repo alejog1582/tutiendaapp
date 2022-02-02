@@ -13,7 +13,7 @@ class Admin {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
-		if (auth()->check() && auth()->user()->email == 'cliente_evertec@example.com') {
+		if (auth()->check() && auth()->user()->email == 'cliente_tutiendaapp@example.com') {
 
 			return $next($request);
 		}

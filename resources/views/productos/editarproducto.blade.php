@@ -29,59 +29,46 @@
                 <hr><hr>
 				<label for="descripcion_producto">Descripcion de Producto</label>
 				<textarea required name="descripcion_producto" id="descripcion_producto" class="form-control" rows="12">{{ $producto->descripcion_producto }}</textarea>
-				<hr><hr>
-				<label for="categoria_producto">Categoria de Producto</label>
-				<select required onchange="getval(this)" id="categoria_producto" class="form-control @if ($errors->has('categoria_producto')) is-invalid	@endif" name="categoria_producto">
-					@if ($producto->categoria_producto == 'anchetas')
-						<option selected value="anchetas">Anchetas</option>
-  						<option value="cumpleanos">Cumpleaños</option>
-  						<option value="aniversario">Aniversario</option>
-  						<option value="picnic">Picnic</option>
-  						<option value="endulzadas">Endulza tu Dia</option>
-  						<option value="light">Regalos Light</option>  						
+				<hr>
+				<label for="marca_producto">Marca de Producto</label>
+				<select required id="marca_producto" class="form-control @if ($errors->has('marca_producto')) is-invalid	@endif" name="marca_producto">
+					<option selected disabled value="">Elige una Marca</option>
+  					@foreach ($marcas as $marca)
+					  	@if ($marca->id == $producto->id_marca_producto)
+						  	<option selected value="{{$marca->id}}">{{$marca->nombre_marca}}</option>						
+						@else  
+  							<option value="{{$marca->id}}">{{$marca->nombre_marca}}</option>
+						@endif
+					@endforeach  					
+				</select>
+				@if ($errors->has('marca_producto'))
+					@foreach ($errors->get('marca_producto') as $error)
+						<div class="invalid-feedback">{{ $error }}</div>
+					@endforeach
+				@endif
+				<hr>
+				<label for="talla_producto">Categoria de Producto</label>
+				<select required id="talla_producto" class="form-control @if ($errors->has('talla_producto')) is-invalid	@endif" name="talla_producto">
+					@if ($producto->talla_producto == 's')
+						<option selected value="s">S</option>
+  						<option value="m">M</option>
+  						<option value="l">L</option>  						 						
 					@endif
-					@if ($producto->categoria_producto == 'cumpleanos')
-						<option value="anchetas">Anchetas</option>
-  						<option selected value="cumpleanos">Cumpleaños</option>
-  						<option value="aniversario">Aniversario</option>
-  						<option value="picnic">Picnic</option>
-  						<option value="endulzadas">Endulza tu Dia</option>
-  						<option value="light">Regalos Light</option>  						
+					@if ($producto->talla_producto == 'm')
+						<option selected value="m">M</option>
+						<option value="s">S</option>
+  						<option value="l">L</option>  						 						
 					@endif
-					@if ($producto->categoria_producto == 'aniversario')
-						<option value="anchetas">Anchetas</option>
-  						<option value="cumpleanos">Cumpleaños</option>
-  						<option selected value="aniversario">Aniversario</option>
-  						<option value="picnic">Picnic</option>
-  						<option value="endulzadas">Endulza tu Dia</option>
-  						<option value="light">Regalos Light</option>  						
-					@endif
-					@if ($producto->categoria_producto == 'picnic')
-						<option value="anchetas">Anchetas</option>
-  						<option value="cumpleanos">Cumpleaños</option>
-  						<option value="aniversario">Aniversario</option>
-  						<option selected value="picnic">Picnic</option>
-  						<option value="endulzadas">Endulza tu Dia</option>
-  						<option value="light">Regalos Light</option>  						
-					@endif
-					@if ($producto->categoria_producto == 'endulzadas')
-						<option value="anchetas">Anchetas</option>
-  						<option value="cumpleanos">Cumpleaños</option>
-  						<option value="aniversario">Aniversario</option>
-  						<option value="picnic">Picnic</option>
-  						<option selected value="endulzadas">Endulza tu Dia</option>
-  						<option value="light">Regalos Light</option>  						
-					@endif
-					@if ($producto->categoria_producto == 'light')
-						<option value="anchetas">Anchetas</option>
-  						<option value="cumpleanos">Cumpleaños</option>
-  						<option value="aniversario">Aniversario</option>
-  						<option value="picnic">Picnic</option>
-  						<option value="endulzadas">Endulza tu Dia</option>
-  						<option selected value="light">Regalos Light</option>  						
-					@endif					
+					@if ($producto->talla_producto == 'l')
+						<option selected value="l">L</option>  						 						
+						<option value="s">S</option>
+						<option value="m">M</option>
+					@endif										
 				</select>				
-                <hr><hr>
+                <hr>
+				<label for="cantidad_producto">Cantidad de Producto</label>
+				<input type="number" value="{{ $producto->cantidad_producto }}" id="cantidad_producto" name="cantidad_producto" class="form-control">
+				<hr>
 				<label for="valor_producto">Valor de Producto</label>
 				<input type="number" value="{{ $producto->valor_producto }}" id="valor_producto" name="valor_producto" class="form-control">
 				<hr><hr>

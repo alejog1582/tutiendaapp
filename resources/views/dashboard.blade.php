@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-    @if ($user->email == 'cliente_evertec@example.com')
+    @if ($user->email == 'cliente_tutiendaapp@example.com')
         <br><br>
         <div class="row">
             <div class="col-md-6">
